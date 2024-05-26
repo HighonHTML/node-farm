@@ -1,7 +1,8 @@
 const fs = require("fs");
 const http = require("http");
-const url = require('node:url');
-const replaceTemplate = require('./modules/replaceTemplate')
+const url = require("node:url");
+const slugify = require("slugify");
+const replaceTemplate = require("./modules/replaceTemplate");
 
 // const textInput = fs.readFileSync("./txt/input.txt", "utf-8");
 // console.log(textInput);
@@ -35,9 +36,12 @@ const tempCard = fs.readFileSync(
   "utf-8"
 );
 
+const slug = slugify("Fresh avocado", { lower: true, replacement: "-" });
+console.log(slug)
+
 const server = http.createServer((req, res) => {
-  const {pathname, query} = url.parse(req.url, true)
- 
+  const { pathname, query } = url.parse(req.url, true);
+
   if (pathname === "/" || pathname === "/overview") {
     res.writeHead(200, {
       "Content-type": "text/html",
@@ -51,9 +55,9 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {
       "Content-type": "text/html",
     });
-    const product = dataObject[query.id]
-    const output = replaceTemplate(tempProduct, product)
-    console.log(output)
+    const product = dataObject[query.id];
+    const output = replaceTemplate(tempProduct, product);
+    console.log(output);
     res.end(output);
   } else if (pathname === "/api") {
     res.writeHead(200, {
